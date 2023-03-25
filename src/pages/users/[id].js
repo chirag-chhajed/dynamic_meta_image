@@ -17,8 +17,9 @@ const Id = ({ data }) => {
     <>
       <Head>
         <title>{data.name}</title>
-        <meta property="twitter:title" content={`${data.name}`} />
-        <meta property="twitter:description" content={`${data.name}`} />
+        <meta property="twitter:title" content={data.name} />
+        <meta property="twitter:description" content={data.email} />
+        <meta property="twitter:image" content="/static/placeholder.png" />
       </Head>
       <section className="p-4">
         <Card {...data} />
