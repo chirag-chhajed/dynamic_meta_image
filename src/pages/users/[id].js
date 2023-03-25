@@ -37,7 +37,10 @@ const Id = ({ data, imageDataUrl }) => {
       <Head>
         <title>{data.name}</title>
         <meta property="og:title" content={data.name} />
-        <meta property="og:description" content={data.name} />
+        <meta
+          property="og:description"
+          content={data.name + data.email + data.website}
+        />
         <meta property="og:image" content={imageDataUrl} />
 
         <meta property="twitter:title" content={data.name} />
