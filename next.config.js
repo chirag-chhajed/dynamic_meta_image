@@ -1,6 +1,17 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
+module.exports = {
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.module.rules.push({
+        test: /canvas/,
+        use: "null-loader",
+      });
+    }
 
-module.exports = nextConfig
+    return config;
+  },
+  env: {
+    // Workaround for https://github.com/Automattic/node-canvas/issues/1238
+    // You can remove this after the issue is fixed.
+    LD_PRELOAD: "/usr/lib/x86_64-linux-gnu/libfontconfig.so.1",
+  },
+};
