@@ -22,7 +22,6 @@ const Id = ({ data }) => {
       </Head>
       <section className="p-4">
         <Card {...data} />
-        <img src={imageDataUrl} alt={`${data.name}'s image`} />
       </section>
     </>
   );
