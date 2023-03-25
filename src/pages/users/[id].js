@@ -1,6 +1,6 @@
 import Card from "@/components/Card";
 import Head from "next/head";
-import { createCanvas } from "canvas";
+import { createCanvas } from "@napi-rs/canvas";
 
 export async function generateMetaImage({ name, email, website }) {
   const canvas = createCanvas(1200, 630);
