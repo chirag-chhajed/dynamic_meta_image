@@ -1,25 +1,20 @@
-import Link from "next/link";
+// import Link from "next/link";
 
-const Card = ({
-  firstName,
-  lastName,
-  email,
-  date,
-  favouriteMovie,
-  Location,
-}) => {
+const Card = ({ name, email, phone, website, address }) => {
   return (
     <div className="border border-black shadow-lg">
-      <h2>
-        Name:{firstName} {lastName}
-      </h2>
+      <h2>Name:{name}</h2>
       <p>
         <span>Email:</span>
         {email}
       </p>
-      <p>Date:{date}</p>
-      <p>Favourite Movie: {favouriteMovie}</p>
-      <p>Location: {Location}</p>
+      <p>Phone:{phone}</p>
+      <p>Website: {website}</p>
+      <p>
+        Location:
+        {address &&
+          `${address.street} + ${address.suite} + ${address.city} + ${address.zipcode}`}
+      </p>
     </div>
   );
 };

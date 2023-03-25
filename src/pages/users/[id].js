@@ -5,7 +5,7 @@ import Head from "next/head";
 export async function getServerSideProps(context) {
   const { id } = context.query;
 
-  const res = await fetch(`http://localhost:4000/data/${id}`);
+  const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
   const data = await res.json();
   console.log(data);
 
@@ -16,17 +16,9 @@ const Id = ({ data }) => {
   return (
     <>
       <Head>
-        <title>
-          {data.firstName} {data.lastName}
-        </title>
-        <meta
-          property="twitter:title"
-          content={`${data.firstName} ${data.lastName}`}
-        />
-        <meta
-          property="twitter:description"
-          content={`${data.firstName} ${data.lastName}`}
-        />
+        <title>{data.name}</title>
+        <meta property="twitter:title" content={`${data.name}`} />
+        <meta property="twitter:description" content={`${data.name}`} />
       </Head>
       <section className="p-4">
         <Card {...data} />

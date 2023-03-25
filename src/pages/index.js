@@ -2,7 +2,7 @@ import Head from "next/head";
 import Card from "@/components/Card";
 
 export async function getServerSideProps() {
-  const res = await fetch(`http://localhost:4000/data`);
+  const res = await fetch(`https://jsonplaceholder.typicode.com/users/`);
   const data = await res.json();
   console.log(data);
 
@@ -19,8 +19,8 @@ export default function Home({ data }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-col gap-4 p-4 sm:grid sm:grid-cols-2 md:grid-cols-3">
-        {data.map((data) => (
-          <Card key={data.id} {...data} />
+        {data.map((card) => (
+          <Card key={card.id} {...card} />
         ))}
       </main>
     </>
