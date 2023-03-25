@@ -1,41 +1,20 @@
 import Card from "@/components/Card";
 import Head from "next/head";
-import { useState, useEffect, useRef } from "react";
-import { toPng } from "html-to-image";
+import { useState } from "react";
+import htmlToImage from "html-to-image";
 
-const Id = ({ data }) => {
-  const [imageDataUrl, setImageDataUrl] = useState(null);
-  const ref = useRef();
-
-  useEffect(() => {
-    async function generateImage() {
-      const dataUrl = await toPng(ref.current);
-      setImageDataUrl(dataUrl);
-    }
-
-    generateImage();
-  }, [data]);
-
-  return (
-    <>
-      <Head>
-        <title>{data.name}</title>
-        <meta property="og:title" content={data.name} />
-        <meta property="og:description" content={data.name} />
-        {imageDataUrl && <meta property="og:image" content={imageDataUrl} />}
-
-        <meta property="twitter:title" content={data.name} />
-        <meta property="twitter:description" content={data.name} />
-        {imageDataUrl && (
-          <meta property="twitter:image" content={imageDataUrl} />
-        )}
-      </Head>
-      <section className="p-4" ref={ref}>
-        <Card {...data} />
-      </section>
-    </>
-  );
-};
+export async function generateMetaImage({ name, email, website }) {
+  const html = `
+    <div>
+      <h1>${name}</h1>
+      <p>${email}</p>
+      <p>${website}</p>
+    </div>
+  `;
+  const canvas = await htmlToImage.toCanvas(html);
+  const imageData = canvas.toDataURL("image/png");
+  return imageData;
+}
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -43,7 +22,31 @@ export async function getServerSideProps(context) {
 
   const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
   const data = await res.json();
-  return { props: { data } };
+  const { name, email, website } = data;
+  const imageDataUrl = await generateMetaImage({ name, email, website });
+
+  return { props: { data, imageDataUrl } };
 }
+
+const Id = ({ data, imageDataUrl }) => {
+  return (
+    <>
+      <Head>
+        <title>{data.name}</title>
+        <meta property="og:title" content={data.name} />
+        <meta property="og:description" content={data.name} />
+        <meta property="og:image" content={imageDataUrl} />
+
+        <meta property="twitter:title" content={data.name} />
+        <meta property="twitter:description" content={data.name} />
+        <meta property="twitter:image" content={imageDataUrl} />
+      </Head>
+      <section className="p-4">
+        <Card {...data} />
+        <img src={imageDataUrl} alt={`${data.name}'s image`} />
+      </section>
+    </>
+  );
+};
 
 export default Id;
