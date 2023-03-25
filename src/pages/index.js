@@ -20,9 +20,9 @@ export default function Home({ data }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-col gap-4 p-4 sm:grid sm:grid-cols-2 md:grid-cols-3">
-        {data.map((card) => (
-          <Link href={`users/${card.id}`}>
-            <Card key={card.id} {...card} />
+        {data.map((card, index) => (
+          <Link key={card.id} href={`users/${card.id}`}>
+            <Card {...card} />
           </Link>
         ))}
       </main>
