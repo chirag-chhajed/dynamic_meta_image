@@ -15,8 +15,8 @@ export async function generateMetaImage({ name, email, website }) {
   context.fillText(`${email}`, 100, 100);
   context.fillText(`${website}`, 100, 100);
 
-  const imageData = canvas.toDataURL("image/png");
-  return imageData;
+  return canvas.toDataURL("image/png");
+  // return imageData;
 }
 
 export async function getServerSideProps(context) {
