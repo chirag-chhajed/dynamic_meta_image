@@ -1,5 +1,3 @@
-// import Link from "next/link";
-
 const Card = ({ name, email, phone, website, address }) => {
   return (
     <div className="border border-black shadow-lg">
