@@ -1,6 +1,6 @@
-import Link from "next/link";
+// import Link from "next/link";
 
-const Card = ({ name, email, phone, website, address, id }) => {
+const Card = ({ name, email, phone, website, address }) => {
   return (
     <div className="border border-black shadow-lg">
       <h2>Name:{name}</h2>
@@ -15,7 +15,6 @@ const Card = ({ name, email, phone, website, address, id }) => {
         {address &&
           `${address.street} + ${address.suite} + ${address.city} + ${address.zipcode}`}
       </p>
-      <Link href={`/users/${id}`}>detail</Link>
     </div>
   );
 };
