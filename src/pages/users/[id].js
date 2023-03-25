@@ -1,23 +1,41 @@
 import Card from "@/components/Card";
 import Head from "next/head";
-import { createCanvas } from "canvas";
+import { useState, useEffect, useRef } from "react";
+import { toPng } from "html-to-image";
 
-export async function generateMetaImage({ name, email, website }) {
-  const canvas = createCanvas(1200, 630);
-  const context = canvas.getContext("2d");
+const Id = ({ data }) => {
+  const [imageDataUrl, setImageDataUrl] = useState(null);
+  const ref = useRef();
 
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, 1200, 630);
+  useEffect(() => {
+    async function generateImage() {
+      const dataUrl = await toPng(ref.current);
+      setImageDataUrl(dataUrl);
+    }
 
-  context.fillStyle = "#000000";
-  context.font = "bold 48px sans-serif";
-  context.fillText(`${name}`, 100, 100);
-  context.fillText(`${email}`, 100, 100);
-  context.fillText(`${website}`, 100, 100);
+    generateImage();
+  }, [data]);
 
-  const imageData = canvas.toDataURL("image/png");
-  return imageData;
-}
+  return (
+    <>
+      <Head>
+        <title>{data.name}</title>
+        <meta property="og:title" content={data.name} />
+        <meta property="og:description" content={data.name} />
+        {imageDataUrl && <meta property="og:image" content={imageDataUrl} />}
+
+        <meta property="twitter:title" content={data.name} />
+        <meta property="twitter:description" content={data.name} />
+        {imageDataUrl && (
+          <meta property="twitter:image" content={imageDataUrl} />
+        )}
+      </Head>
+      <section className="p-4" ref={ref}>
+        <Card {...data} />
+      </section>
+    </>
+  );
+};
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -25,30 +43,7 @@ export async function getServerSideProps(context) {
 
   const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
   const data = await res.json();
-  const { name, email, website } = data;
-  const imageDataUrl = await generateMetaImage({ name, email, website });
-
-  return { props: { data, imageDataUrl } };
+  return { props: { data } };
 }
-
-const Id = ({ data, imageDataUrl }) => {
-  return (
-    <>
-      <Head>
-        <title>{data.name}</title>
-        <meta property="og:title" content={data.name} />
-        <meta property="og:description" content={data.name} />
-        <meta property="og:image" content={imageDataUrl} />
-
-        <meta property="twitter:title" content={data.name} />
-        <meta property="twitter:description" content={data.name} />
-        <meta property="twitter:image" content={imageDataUrl} />
-      </Head>
-      <section className="p-4">
-        <Card {...data} />
-      </section>
-    </>
-  );
-};
 
 export default Id;
