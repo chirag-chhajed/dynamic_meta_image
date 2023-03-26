@@ -12,8 +12,8 @@ export async function generateMetaImage({ name, email, website }) {
   context.fillStyle = "#000000";
   context.font = "bold 48px sans-serif";
   context.fillText(`${name}`, 100, 100);
-  context.fillText(`${email}`, 100, 100);
-  context.fillText(`${website}`, 100, 100);
+  context.fillText(`${email}`, 100, 300);
+  context.fillText(`${website}`, 100, 500);
 
   return canvas.toDataURL("image/png");
   // return imageData;
