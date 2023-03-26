@@ -34,6 +34,8 @@ const Id = ({ data, imageDataUrl }) => {
           content={data.name + data.email + data.website}
         />
         <meta property="og:image" content={[imageDataUrl]} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
 
         <meta property="twitter:card" content="summary_large_image" />
         <meta
@@ -46,6 +48,8 @@ const Id = ({ data, imageDataUrl }) => {
           content={data.name + data.email + data.website}
         />
         <meta property="twitter:image" content={[imageDataUrl]} />
+        <meta property="twitter:image:width" content="1200" />
+        <meta property="twitter:image:height" content="630" />
       </Head>
       <section className="p-4">
         <Card {...data} />
