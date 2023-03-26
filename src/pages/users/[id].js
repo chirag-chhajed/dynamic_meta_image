@@ -1,23 +1,5 @@
 import Card from "@/components/Card";
 import Head from "next/head";
-import { createCanvas } from "@napi-rs/canvas";
-
-export async function generateMetaImage({ name, email, website }) {
-  const canvas = createCanvas(1200, 630);
-  const context = canvas.getContext("2d");
-
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, 1200, 630);
-
-  context.fillStyle = "#000000";
-  context.font = "bold 48px sans-serif";
-  context.fillText(`${name}`, 100, 100);
-  context.fillText(`${email}`, 100, 300);
-  context.fillText(`${website}`, 100, 500);
-
-  return canvas.toDataURL("image/png");
-  // return imageData;
-}
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -26,7 +8,7 @@ export async function getServerSideProps(context) {
   const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
   const data = await res.json();
   const { name, email, website } = data;
-  const imageDataUrl = await generateMetaImage({ name, email, website });
+  const imageDataUrl = `https://dynamic-meta-image.vercel.app/api/generateMetaImage?name=${name}&email=${email}&website=${website}`;
 
   return { props: { data, imageDataUrl } };
 }

@@ -1,41 +1,54 @@
 import { createCanvas } from "@napi-rs/canvas";
-import { promisify } from "util";
-import { join } from "path";
-import fs from "fs";
-import process from "process";
+// import { promisify } from "util";
+// import { join } from "path";
+// import fs from "fs";
+// import process from "process";
 
 export default async function handler(req, res) {
   // Create a canvas element
-  const canvas = createCanvas(1200, 630);
-  const ctx = canvas.getContext("2d");
+  if (req.method === "GET") {
+    const canvas = createCanvas(1200, 630);
+    const ctx = canvas.getContext("2d");
+    console.log(req.query);
 
-  // Set the background color
-  ctx.fillStyle = "#fff";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const { name, email, website } = req.query;
 
-  // Set the text color and font
-  ctx.fillStyle = "#000";
-  ctx.font = "bold 64px Arial";
+    // Set the background color
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Draw the text
-  ctx.fillText("Hello", 100, 200);
+    // Set the text color and font
+    ctx.fillStyle = "#000";
+    ctx.font = "bold 64px Arial";
 
-  // Export the canvas as a PNG image buffer
-  const buffer = canvas.toBuffer("image/png");
+    // Draw the text
+    // ctx.fillText("Hello", 100, 200);
+    ctx.fillText(`${name}`, 100, 100);
+    ctx.fillText(`${email}`, 100, 300);
+    ctx.fillText(`${website}`, 100, 500);
 
-  // Write the buffer to a temporary file
-  const writeFile = promisify(fs.writeFile);
-  const filePath = join(process.cwd());
-  await writeFile(filePath, buffer);
+    // Export the canvas as a PNG image buffer
+    const buffer = canvas.toBuffer("image/png");
 
-  // Set the response headers
-  res.setHeader("Content-Type", "image/png");
-  res.setHeader("Cache-Control", "public, max-age=86400, immutable");
+    // Write the buffer to a temporary file
+    // const writeFile = promisify(fs.writeFile);
+    // const filePath = join(process.cwd());
+    // await writeFile(filePath, buffer);
+
+    // Set the response headers
+    res.setHeader("Cache-Control", "public, max-age=86400, immutable");
+    res.setHeader("Content-Type", "image/png");
+    res.send(buffer);
+    res.status(200);
+    return;
+  }
+  res.status(400).json({ message: "Invalid method" });
+  return;
 
   // Stream the image file to the response
-  const stream = fs.createReadStream(filePath);
-  stream.pipe(res);
+  // const stream = fs.createReadStream(filePath);
+  // stream.pipe(res);
 
   // Delete the temporary file
-  fs.unlinkSync(filePath);
+  // fs.unlinkSync(filePath);
 }
