@@ -8,7 +8,7 @@ export async function getServerSideProps(context) {
   const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
   const data = await res.json();
   const { name, email, website } = data;
-  const imageDataUrl = `https://dynamic-meta-image.vercel.app/api/generateMetaImage?name=${name}&email=${email}&website=${website}`;
+  const imageDataUrl = `/api/generateMetaImage?name=${name}&email=${email}&website=${website}`;
 
   return { props: { data, imageDataUrl } };
 }
@@ -33,7 +33,7 @@ const Id = ({ data, imageDataUrl }) => {
           property="og:description"
           content={data.name + data.email + data.website}
         />
-        <meta property="og:image" content={[imageDataUrl]} />
+        <meta property="og:image" content={imageDataUrl} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
@@ -47,7 +47,7 @@ const Id = ({ data, imageDataUrl }) => {
           property="twitter:description"
           content={data.name + data.email + data.website}
         />
-        <meta property="twitter:image" content={[imageDataUrl]} />
+        <meta property="twitter:image" content={imageDataUrl} />
         <meta property="twitter:image:width" content="1200" />
         <meta property="twitter:image:height" content="630" />
       </Head>
