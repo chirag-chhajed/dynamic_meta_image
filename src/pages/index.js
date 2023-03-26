@@ -2,7 +2,7 @@ import Head from "next/head";
 import Card from "@/components/Card";
 
 export async function getServerSideProps() {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/users/`);
+  const res = await fetch(`https://jsonplaceholder.typicode.com/users`);
   const data = await res.json();
   // console.log(data);
 

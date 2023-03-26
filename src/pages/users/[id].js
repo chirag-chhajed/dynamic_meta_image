@@ -1,25 +1,36 @@
 import Card from "@/components/Card";
 import Meta from "@/components/Meta";
-// import Head from "next/head";
-import { createCanvas } from "canvas";
+import sharp from "sharp";
 
-async function generateMetaImage({ name, email, website }) {
-  const canvas = createCanvas(1200, 630);
-  const context = canvas.getContext("2d");
+export async function generateMetaImage({ name, email, website }) {
+  const buffer = await sharp({
+    create: {
+      width: 1200,
+      height: 630,
+      channels: 4,
+      background: { r: 255, g: 255, b: 255, alpha: 1 },
+    },
+  })
+    .composite([
+      {
+        input:
+          Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
+          <foreignObject width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml" style="font-size: 48px; font-family: sans-serif;">
+              <p>${name}</p>
+              <p>${email}</p>
+              <p>${website}</p>
+            </div>
+          </foreignObject>
+        </svg>`),
+        left: 100,
+        top: 100,
+      },
+    ])
+    .png()
+    .toBuffer();
 
-  // Set background color
-  context.fillStyle = "#ffffff";
-  context.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Draw text
-  context.fillStyle = "#000000";
-  context.font = "bold 48px sans-serif";
-  context.fillText(`${name}`, 100, 100);
-  context.fillText(`${email}`, 100, 200);
-  context.fillText(`${website}`, 100, 300);
-
-  const imageData = canvas.toDataURL("image/png");
-  return imageData;
+  return `data:image/png;base64,${buffer.toString("base64")}`;
 }
 
 export async function getServerSideProps(context) {
