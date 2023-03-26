@@ -36,7 +36,10 @@ export default async function handler(req, res) {
     // await writeFile(filePath, buffer);
 
     // Set the response headers
-    res.setHeader("Cache-Control", "public, max-age=86400, immutable");
+    res.setHeader(
+      "Cache-Control",
+      "public, immutable, no-transform, s-maxage=31536000, max-age=31536000"
+    );
     res.setHeader("Content-Type", "image/png");
     res.send(buffer);
     res.status(200);
