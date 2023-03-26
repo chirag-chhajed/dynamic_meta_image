@@ -17,26 +17,12 @@ const Id = ({ data, imageDataUrl }) => {
   return (
     <>
       <Head>
-        {/* <title></title>
-        <meta property="og:title" content={data.name} />
-        <meta
-          property="og:description"
-          content=
-        />
-        <meta property="og:image" content={imageDataUrl} />
-
-        <meta property="twitter:title" content={data.name} />
-        <meta property="twitter:description" content={data.name} />
-        <meta property="twitter:image" content={imageDataUrl} />
-        <!-- Primary Meta Tags --> */}
         <title>{data.name}</title>
         <meta name="title" content={data.name} />
         <meta
           name="description"
           content={data.name + data.email + data.website}
         />
-
-        {/* <!-- Open Graph / Facebook --> */}
         <meta property="og:type" content="website" />
         <meta
           property="og:url"
@@ -47,7 +33,7 @@ const Id = ({ data, imageDataUrl }) => {
           property="og:description"
           content={data.name + data.email + data.website}
         />
-        <meta property="og:image" content={imageDataUrl} />
+        <meta property="og:image" content={[imageDataUrl]} />
 
         <meta property="twitter:card" content="summary_large_image" />
         <meta
@@ -59,7 +45,7 @@ const Id = ({ data, imageDataUrl }) => {
           property="twitter:description"
           content={data.name + data.email + data.website}
         />
-        <meta property="twitter:image" content={imageDataUrl} />
+        <meta property="twitter:image" content={[imageDataUrl]} />
       </Head>
       <section className="p-4">
         <Card {...data} />
