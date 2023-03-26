@@ -8,7 +8,7 @@ export async function getServerSideProps(context) {
   const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
   const data = await res.json();
   const { name, email, website } = data;
-  const imageDataUrl = `https://dynamic-meta-image.app/api/generateMetaImage?name=${name}&email=${email}&website=${website}`;
+  const imageDataUrl = `https://dynamic-meta-image.vercel.app/api/generateMetaImage?name=${name}&email=${email}&website=${website}`;
 
   return { props: { data, imageDataUrl } };
 }
