@@ -32,6 +32,7 @@ export default async function handler(req, res) {
       "public, immutable, no-transform, s-maxage=31536000, max-age=31536000"
     );
     res.setHeader("Content-Type", "image/png");
+    res.setHeader("Content-Disposition", "attachment; filename=myimage.png");
     res.send(buffer);
     res.status(200);
     return;
