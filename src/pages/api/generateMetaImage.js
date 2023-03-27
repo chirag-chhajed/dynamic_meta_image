@@ -34,7 +34,8 @@ export default async function handler(req, res) {
       fs.unlink(`${publicPath}/undefined.png`);
     }
 
-    res.status(200).end();
+    res.send({ data: "Hello World" });
+    res.status(200);
     return;
   }
   res.status(400).json({ message: "Invalid method" });
