@@ -54,7 +54,7 @@ const Id = ({ data, imageDataUrl }) => {
       <section className="p-4">
         <Card {...data} />
       </section>
-      <img src={imageDataUrl} alt={data.name} />
+      {/* <img src={imageDataUrl} alt={data.name} /> */}
     </>
   );
 };
