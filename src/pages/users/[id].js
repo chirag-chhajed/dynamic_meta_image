@@ -1,19 +1,34 @@
 import Card from "@/components/Card";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
-  console.log(id, "id");
-
   const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
   const data = await res.json();
   const { name, email, website } = data;
-  const imageDataUrl = `/api/generateMetaImage?name=${name}&email=${email}&website=${website}`;
 
-  return { props: { data, imageDataUrl } };
+  // Call the image generation API and get the generated image URL
+  await fetch(
+    `http://localhost:3000/api/generateMetaImage?id=${id}&name=${name}&email=${email}&website=${website}`
+  );
+
+  return { props: { data, id } };
 }
 
-const Id = ({ data, imageDataUrl }) => {
+const Id = ({ data, id }) => {
+  const { name, email, website } = data;
+  const [showImage, setShowImage] = useState(false);
+
+  useEffect(() => {
+    const fetching = async () => {
+      await fetch(
+        `http://localhost:3000/api/generateMetaImage?id=${id}&name=${name}&email=${email}&website=${website}`
+      );
+      setShowImage(!showImage);
+    };
+    fetching();
+  }, []);
   return (
     <>
       <Head>
@@ -33,7 +48,10 @@ const Id = ({ data, imageDataUrl }) => {
           property="og:description"
           content={data.name + data.email + data.website}
         />
-        <meta property="og:image" content={imageDataUrl} />
+        <meta
+          property="og:image"
+          content={`https://dynamic-meta-image.vercel.app/api/${id}.png`}
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
@@ -47,14 +65,23 @@ const Id = ({ data, imageDataUrl }) => {
           property="twitter:description"
           content={data.name + data.email + data.website}
         />
-        <meta property="twitter:image" content={imageDataUrl} />
+        <meta
+          property="twitter:image"
+          content={`https://dynamic-meta-image.vercel.app/api/${id}.png`}
+        />
         <meta property="twitter:image:width" content="1200" />
         <meta property="twitter:image:height" content="630" />
       </Head>
       <section className="p-4">
         <Card {...data} />
       </section>
-      <img src={imageDataUrl} alt={data.name} />
+
+      {showImage && (
+        <img
+          src={`https://dynamic-meta-image.vercel.app/api/${id}.png`}
+          alt={data.name}
+        />
+      )}
     </>
   );
 };

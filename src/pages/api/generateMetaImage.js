@@ -1,4 +1,6 @@
 import { createCanvas } from "@napi-rs/canvas";
+import fs from "fs";
+import path from "path";
 
 export default async function handler(req, res) {
   // Create a canvas element
@@ -7,7 +9,7 @@ export default async function handler(req, res) {
     const ctx = canvas.getContext("2d");
     console.log(req.query);
 
-    const { name, email, website } = req.query;
+    const { name, email, website, id } = req.query;
     // Set the background color
     ctx.fillStyle = "#d62828";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -25,16 +27,14 @@ export default async function handler(req, res) {
 
     // Export the canvas as a PNG image buffer
     const buffer = canvas.toBuffer("image/png");
+    const publicPath = path.join(process.cwd(), "public");
 
-    // Set the response headers
-    res.setHeader(
-      "Cache-Control",
-      "public, immutable, no-transform, s-maxage=31536000, max-age=31536000"
-    );
-    res.setHeader("Content-Type", "image/png");
-    res.setHeader("Content-Disposition", "attachment; filename=myimage.png");
-    res.send(buffer);
-    res.status(200);
+    fs.writeFileSync(`${publicPath}/${id}.png`, buffer);
+    if (fs.existsSync(`${publicPath}/undefined.png`)) {
+      fs.unlink(`${publicPath}/undefined.png`);
+    }
+
+    res.status(200).end();
     return;
   }
   res.status(400).json({ message: "Invalid method" });
