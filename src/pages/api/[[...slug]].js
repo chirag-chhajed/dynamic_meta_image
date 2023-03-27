@@ -16,6 +16,7 @@ export default cors(async (req, res) => {
       if (error) {
         return res.status(404).send(null);
       }
+      res.setHeader("Access-Control-Allow-Origin", "*");
       return res.status(200).send(data);
     });
   } else {
