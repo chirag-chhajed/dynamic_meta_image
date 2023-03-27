@@ -3,14 +3,7 @@ import Head from "next/head";
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
-  // const protocol = window.location.protocol;
   console.log(id, "id");
-  // const [api, check] = await Promise.all([
-  //   fetch("https://jsonplaceholder.typicode.com/users/${id}"),
-  //   fetch(
-  //     `/api/generateMetaImage?id=${id}name=${name}&email=${email}&website=${website}`
-  //   ),
-  // ]);
   const first = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
   const data = await first.json();
   const { name, email, website } = data;
@@ -74,7 +67,7 @@ const Id = ({ data, id }) => {
         <Card {...data} />
       </section>
       <img
-        src={`https://dynamic-meta-image.vercel.app/api/${id}.png`}
+        src={`https://dynamic-meta-image.vercel.app/${id}.png`}
         className="aspect-[1200/630]"
         alt={data.name}
       />

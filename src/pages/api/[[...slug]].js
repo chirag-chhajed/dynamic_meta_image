@@ -1,7 +1,12 @@
 import fs from "fs";
 import { join } from "path";
+import microCors from "micro-cors";
 
-export default function handler(req, res) {
+const cors = microCors({
+  allowMethods: ["GET", "HEAD"],
+});
+
+export default cors(async (req, res) => {
   if (req.query.slug && req.query.slug.length) {
     console.log(req.query.slug);
     const publicDir = __dirname.split(".next")[0] + "public/";
@@ -16,4 +21,4 @@ export default function handler(req, res) {
   } else {
     res.status(404).send(null);
   }
-}
+});

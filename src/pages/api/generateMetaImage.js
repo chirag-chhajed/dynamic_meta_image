@@ -1,8 +1,13 @@
 import { createCanvas } from "@napi-rs/canvas";
 import fs from "fs";
 import path from "path";
+import microCors from "micro-cors";
 
-export default async function handler(req, res) {
+const cors = microCors({
+  allowMethods: ["GET", "HEAD"],
+});
+
+export default cors(async (req, res) => {
   // Create a canvas element
   if (req.method === "GET") {
     const canvas = createCanvas(1200, 630);
@@ -40,4 +45,4 @@ export default async function handler(req, res) {
   }
   res.status(400).json({ message: "Invalid method" });
   return;
-}
+});
