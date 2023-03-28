@@ -20,17 +20,15 @@ export async function getServerSideProps(context) {
     const { name, email, website } = data;
 
     const second = await fetch(
-      `https://dynamic-meta-image.vercel.app/api/generateMetaImage?name=${
-        name.split(" ")[0]
-      }&email=${email}&website=${website}`
+      `https://dynamic-meta-image.vercel.app/api/generateMetaImage?name=${name}&email=${email}&website=${website}`
     );
     if (!second.ok) {
       throw new Error(
         `Failed to generate meta image: ${second.status} ${second.statusText}`
       );
     }
-    const {url} = await second.json();
-    
+    const { url } = await second.json();
+    console.log(url);
 
     return { props: { data, id, url, name, email, website } };
   } catch (error) {
@@ -58,13 +56,13 @@ const Id = ({ data, id, url, name, email, website }) => {
         <meta property="og:image:height" content="630" />
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={"https://dynamic-meta-image.vercel.app/"} />
+        <meta
+          property="twitter:url"
+          content={"https://dynamic-meta-image.vercel.app/"}
+        />
         <meta property="twitter:title" content={name} />
         <meta property="twitter:description" content={name + email + website} />
-        <meta
-          property="twitter:image"
-          content={url}
-        />
+        <meta property="twitter:image" content={url} />
         <meta property="twitter:image:width" content="1200" />
         <meta property="twitter:image:height" content="630" />
       </Head>
