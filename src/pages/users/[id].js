@@ -58,12 +58,12 @@ const Id = ({ data, id, url, name, email, website }) => {
         <meta property="og:image:height" content="630" />
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={url} />
+        <meta property="twitter:url" content={"https://dynamic-meta-image.vercel.app/"} />
         <meta property="twitter:title" content={name} />
         <meta property="twitter:description" content={name + email + website} />
         <meta
           property="twitter:image"
-          content={`https://dynamic-meta-image.vercel.app/api/${id}.png`}
+          content={url}
         />
         <meta property="twitter:image:width" content="1200" />
         <meta property="twitter:image:height" content="630" />
