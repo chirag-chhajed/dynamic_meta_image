@@ -9,7 +9,7 @@ export async function getServerSideProps(context) {
   const { name, email, website } = data;
 
   const second = await fetch(
-    `https://dynamic-meta-image.vercel.app/api/generateMetaImage?id=${id}&name=${name}&email=${email}&website=${website}`
+    `https://jpt6b4-3000.csb.app/api/generateMetaImage?id=${id}&name=${name}&email=${email}&website=${website}`
   );
   const check = await second.json();
   console.log(check);
@@ -41,7 +41,7 @@ const Id = ({ data, id }) => {
         />
         <meta
           property="og:image"
-          content={`https://dynamic-meta-image.vercel.app/api/${id}.png`}
+          content={`https://jpt6b4-3000.csb.app/api/${id}.png`}
         />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -58,7 +58,7 @@ const Id = ({ data, id }) => {
         />
         <meta
           property="twitter:image"
-          content={`https://dynamic-meta-image.vercel.app/api/${id}.png`}
+          content={`https://jpt6b4-3000.csb.app/api/${id}.png`}
         />
         <meta property="twitter:image:width" content="1200" />
         <meta property="twitter:image:height" content="630" />
@@ -67,7 +67,7 @@ const Id = ({ data, id }) => {
         <Card {...data} />
       </section>
       <img
-        src={`https://dynamic-meta-image.vercel.app/${id}.png`}
+        src={`https://jpt6b4-3000.csb.app/${id}.png`}
         className="aspect-[1200/630]"
         alt={data.name}
       />

@@ -40,7 +40,7 @@ export default cors(async (req, res) => {
     }
 
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.send({ data: "Hello World" });
+    res.json({ data: "Hello World" });
     res.status(200);
     return;
   }
