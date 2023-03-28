@@ -3,11 +3,14 @@ import Card from "@/components/Card";
 import Link from "next/link";
 
 export async function getServerSideProps() {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/users/`);
-  const data = await res.json();
-  // console.log(data);
-
-  return { props: { data } };
+  try {
+    const res = await fetch(`https://jsonplaceholder.typicode.com/users/`);
+    const data = await res.json();
+    return { props: { data } };
+  } catch (error) {
+    console.error(error);
+    throw new Error('failed to fetch data')
+  }
 }
 
 export default function Home({ data }) {

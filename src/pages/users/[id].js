@@ -2,60 +2,63 @@ import Card from "@/components/Card";
 import Head from "next/head";
 
 export async function getServerSideProps(context) {
-  const { id } = context.query;
-  console.log(id, "id");
-  const first = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
-  const data = await first.json();
-  const { name, email, website } = data;
+  try {
+    const { id } = context.query;
+    console.log(id, "id");
+    const first = await fetch(
+      `https://jsonplaceholder.typicode.com/users/${id}`
+    );
+    if (!first.ok) {
+      throw new Error(
+        `Failed to fetch user data: ${first.status} ${first.statusText}`
+      );
+    }
+    const data = await first.json();
+    if (!data || !data.name || !data.email) {
+      throw new Error("Failed to parse user data");
+    }
+    const { name, email, website } = data;
 
-  const second = await fetch(
-    `https://dynamic-meta-image.vercel.app/api/generateMetaImage?id=${id}&name=${name}&email=${email}&website=${website}`
-  );
-  const check = await second.json();
-  console.log(check);
+    const second = await fetch(
+      `http://localhost:3000/api/generateMetaImage?name=${name}&email=${email}&website=${website}`
+    );
+    if (!second.ok) {
+      throw new Error(
+        `Failed to generate meta image: ${second.status} ${second.statusText}`
+      );
+    }
+    const {url} = await second.json();
+    
 
-  // const [ checker] = await Promise.all([api.json(), check.json()]);
-
-  return { props: { data, id } };
+    return { props: { data, id, url, name, email, website } };
+  } catch (error) {
+    console.error(error);
+    return { props: { error: error.message || "Unexpected error occurred" } };
+  }
 }
 
-const Id = ({ data, id }) => {
+const Id = ({ data, id, url, name, email, website }) => {
   return (
     <>
       <Head>
-        <title>{data.name}</title>
-        <meta name="title" content={data.name} />
-        <meta
-          name="description"
-          content={data.name + data.email + data.website}
-        />
+        <title>{name}</title>
+        <meta name="title" content={name} />
+        <meta name="description" content={name + email + website} />
         <meta property="og:type" content="website" />
         <meta
           property="og:url"
           content="https://dynamic-meta-image.vercel.app/"
         />
-        <meta property="og:title" content={data.name} />
-        <meta
-          property="og:description"
-          content={data.name + data.email + data.website}
-        />
-        <meta
-          property="og:image"
-          content={`https://dynamic-meta-image.vercel.app/api/${id}.png`}
-        />
+        <meta property="og:title" content={name} />
+        <meta property="og:description" content={name + email + website} />
+        <meta property="og:image" content={url} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta
-          property="twitter:url"
-          content="https://dynamic-meta-image.vercel.app"
-        />
-        <meta property="twitter:title" content={data.name} />
-        <meta
-          property="twitter:description"
-          content={data.name + data.email + data.website}
-        />
+        <meta property="twitter:url" content={url} />
+        <meta property="twitter:title" content={name} />
+        <meta property="twitter:description" content={name + email + website} />
         <meta
           property="twitter:image"
           content={`https://dynamic-meta-image.vercel.app/api/${id}.png`}
@@ -66,11 +69,7 @@ const Id = ({ data, id }) => {
       <section className="p-4">
         <Card {...data} />
       </section>
-      <img
-        src={`https://dynamic-meta-image.vercel.app/${id}.png`}
-        className="aspect-[1200/630]"
-        alt={data.name}
-      />
+      <img src={url} className="aspect-[1200/630]" alt={name} />
     </>
   );
 };

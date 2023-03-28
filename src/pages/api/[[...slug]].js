@@ -4,19 +4,20 @@ import microCors from "micro-cors";
 
 const cors = microCors({
   allowMethods: ["GET", "HEAD"],
+  origin: '*'
 });
 
 export default cors(async (req, res) => {
   if (req.query.slug && req.query.slug.length) {
     console.log(req.query.slug);
-    const publicDir = __dirname.split(".next")[0] + "public/";
+    const publicDir = join(process.cwd(), "uploads");
     const fileUrl = req.query.slug.join("/");
     console.log(join(publicDir, fileUrl));
-    fs.readFile(publicDir + fileUrl, (error, data) => {
+    fs.readFileSync(publicDir + fileUrl, (error, data) => {
       if (error) {
         return res.status(404).send(null);
       }
-      res.setHeader("Access-Control-Allow-Origin", "*");
+      // res.setHeader("Access-Control-Allow-Origin", "*");
       return res.status(200).send(data);
     });
   } else {
