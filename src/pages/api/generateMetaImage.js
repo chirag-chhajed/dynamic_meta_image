@@ -2,6 +2,7 @@ import { createCanvas } from "@napi-rs/canvas";
 import cloudinary from "cloudinary";
 import microCors from "micro-cors";
 import dotenv from "dotenv";
+import { redisConnect } from "../../lib/redis";
 dotenv.config();
 
 const cors = microCors({
@@ -16,7 +17,6 @@ cloudinary.config({
   api_secret: process.env.YOUR_API_SECRET,
 });
 
-
 export default cors(async (req, res) => {
   // Create a canvas element
   if (req.method === "GET") {
@@ -26,30 +26,46 @@ export default cors(async (req, res) => {
 
     const { name, email, website } = req.query;
 
-    // Set the background color
-    ctx.fillStyle = "#d62828";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const key = `${name}-${email}-${website}`;
 
-    // Set the text color and font
-    ctx.fillStyle = "#eae2b7";
-    ctx.font = "bold 64px Arial";
+    const keyExistence = await redisConnect.exists(key);
 
-    // Draw the text
-    ctx.fillText(`${name}`, 100, 100);
-    ctx.fillText(`${email}`, 100, 300);
-    ctx.fillText(`${website}`, 100, 500);
+    if (keyExistence) {
+      console.log("key exists");
+      try {
+        const keyValue = await JSON.parse(redisConnect.get(key));
+        return keyValue;
+      } catch (error) {
+        console.log("failed to fetch the value");
+        console.error(error);
+      }
+    } else {
+      // Set the background color
+      ctx.fillStyle = "#d62828";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Export the canvas as a PNG image buffer
-    const buffer = canvas.toDataURL("image/png");
+      // Set the text color and font
+      ctx.fillStyle = "#eae2b7";
+      ctx.font = "bold 64px Arial";
 
-    try {
-      // Upload image to Cloudinary
-      const result = await cloudinary.v2.uploader.upload(buffer);
-      // Return Cloudinary secure URL
-      res.status(200).json({ url: result.secure_url });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server Error" });
+      // Draw the text
+      ctx.fillText(`${name}`, 100, 100);
+      ctx.fillText(`${email}`, 100, 300);
+      ctx.fillText(`${website}`, 100, 500);
+
+      // Export the canvas as a PNG image buffer
+      const buffer = canvas.toDataURL("image/png");
+
+      try {
+        // Upload image to Cloudinary
+        const result = await cloudinary.v2.uploader.upload(buffer);
+        await redisConnect.set(key,JSON.stringify(result.secure_url))
+        // Return Cloudinary secure URL
+        res.status(200).json({ url: result.secure_url });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server Error" });
+      }
     }
   } else {
     res.status(400).json({ message: "Invalid method" });
