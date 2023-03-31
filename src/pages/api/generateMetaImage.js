@@ -34,7 +34,8 @@ export default cors(async (req, res) => {
       console.log("key exists");
       try {
         const keyValue = await redisConnect.get(key);
-        return keyValue;
+        
+        res.status(200).json({url:keyValue})
       } catch (error) {
         console.log("failed to fetch the value");
         console.error(error);
