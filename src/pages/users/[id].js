@@ -21,7 +21,7 @@ export async function getServerSideProps(context) {
     const { name, email, website } = data;
 
     const second = await fetch(
-      `https://dynamic-meta-image.vercel.app/users/generateMetaImage?name=${name}&email=${email}&website=${website}`
+      `https://dynamic-meta-image.vercel.app/api/generateMetaImage?name=${name}&email=${email}&website=${website}`
     );
     if (!second.ok) {
       throw new Error(
