@@ -34,8 +34,8 @@ export default cors(async (req, res) => {
       console.log("key exists");
       try {
         const keyValue = await redisConnect.get(key);
-        
-        res.status(200).json({url:keyValue})
+
+        res.status(200).json({ url: keyValue });
       } catch (error) {
         console.log("failed to fetch the value");
         console.error(error);
@@ -60,7 +60,7 @@ export default cors(async (req, res) => {
       try {
         // Upload image to Cloudinary
         const result = await cloudinary.v2.uploader.upload(buffer);
-        await redisConnect.set(key,result.secure_url)
+        await redisConnect.set(key, result.secure_url);
         // Return Cloudinary secure URL
         res.status(200).json({ url: result.secure_url });
       } catch (error) {

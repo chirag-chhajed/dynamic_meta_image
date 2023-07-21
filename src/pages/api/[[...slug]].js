@@ -4,7 +4,7 @@ import microCors from "micro-cors";
 
 const cors = microCors({
   allowMethods: ["GET", "HEAD"],
-  origin: '*'
+  origin: "*",
 });
 
 export default cors(async (req, res) => {
