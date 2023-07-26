@@ -1,21 +1,22 @@
-// import Link from "next/link";
-
 const Card = ({ name, email, phone, website, address }) => {
-  // console.log(name, email, phone, website, address)
   return (
-    <div className="border border-black shadow-lg">
-      <h2>Name:{name}</h2>
-      <p>
-        <span>Email:</span>
-        {email}
+    <div className="p-6 text-white bg-gray-800 border border-black rounded-lg">
+      <h2 className="mb-4 text-2xl font-bold">{name}</h2>
+      <p className="mb-2">
+        <span className="font-bold">Email:</span> {email}
       </p>
-      <p>Phone:{phone}</p>
-      <p>Website: {website}</p>
-      <p>
-        Location:
-        {address &&
-          `${address.street} + ${address.suite} + ${address.city} + ${address.zipcode}`}
+      <p className="mb-2">
+        <span className="font-bold">Phone:</span> {phone}
       </p>
+      <p className="mb-2">
+        <span className="font-bold">Website:</span> {website}
+      </p>
+      {address && (
+        <p>
+          <span className="font-bold">Location:</span>{" "}
+          {`${address.street}, ${address.suite}, ${address.city}, ${address.zipcode}`}
+        </p>
+      )}
     </div>
   );
 };

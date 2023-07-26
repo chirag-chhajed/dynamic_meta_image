@@ -41,20 +41,32 @@ export default cors(async (req, res) => {
         console.error(error);
       }
     } else {
-      // Set the background color
-      ctx.fillStyle = "#d62828";
+      const gradient = ctx.createLinearGradient(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      gradient.addColorStop(0, "#304D99");
+      gradient.addColorStop(1, "#192061");
+
+      ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Set the text color and font
-      ctx.fillStyle = "#eae2b7";
-      ctx.font = "bold 64px Arial";
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "bold 60px Arial";
 
-      // Draw the text
-      ctx.fillText(`${name}`, 100, 100);
-      ctx.fillText(`${email}`, 100, 300);
-      ctx.fillText(`${website}`, 100, 500);
+      ctx.fillText("Hello,", 100, 150);
+      ctx.fillText(name, 100, 230);
 
-      // Export the canvas as a PNG image buffer
+      ctx.font = "bold 48px Arial";
+      ctx.fillText("Email:", 100, 340);
+      ctx.fillText(email, 100, 400);
+
+      ctx.font = "bold 48px Arial";
+      ctx.fillText("Website:", 100, 510);
+      ctx.fillText(website, 100, 570);
+
       const buffer = canvas.toDataURL("image/png");
 
       try {
