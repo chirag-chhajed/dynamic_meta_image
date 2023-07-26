@@ -24,3 +24,6 @@ The Dynamic Meta Tag Image Generator is a custom solution developed to enhance t
 - Cloudinary: For image hosting and management.
 - Redis: For caching image URLs to optimize performance.
 - Vercel: For serverless function deployment.
+
+## Example
+![Example](image.png)
