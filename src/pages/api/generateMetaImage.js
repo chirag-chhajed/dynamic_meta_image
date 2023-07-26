@@ -47,8 +47,8 @@ export default cors(async (req, res) => {
         canvas.width,
         canvas.height
       );
-      gradient.addColorStop(0, "#304D99");
-      gradient.addColorStop(1, "#192061");
+      gradient.addColorStop(0, "#304D99"); 
+      gradient.addColorStop(1, "#192061"); 
 
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -66,6 +66,7 @@ export default cors(async (req, res) => {
       ctx.font = "bold 48px Arial";
       ctx.fillText("Website:", 100, 510);
       ctx.fillText(website, 100, 570);
+
 
       const buffer = canvas.toDataURL("image/png");
 

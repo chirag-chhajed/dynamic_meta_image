@@ -1,6 +1,12 @@
 import Card from "@/components/Card";
 import Head from "next/head";
 
+
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? process.env.PRODUCTION_API_URL // Set this environment variable in your hosting platform
+    : process.env.NEXT_PUBLIC_API_URL;
+
 export async function getServerSideProps(context) {
   try {
     const { id } = context.query;
@@ -14,14 +20,14 @@ export async function getServerSideProps(context) {
       );
     }
     const data = await first.json();
-    console.log('first fetched');
+    console.log("first fetched");
     if (!data || !data.name || !data.email) {
       throw new Error("Failed to parse user data");
     }
     const { name, email, website } = data;
 
     const second = await fetch(
-      `https://dynamic-meta-image.vercel.app/api/generateMetaImage?name=${name}&email=${email}&website=${website}`
+      `${API_URL}/api/generateMetaImage?name=${name}&email=${email}&website=${website}`
     );
     if (!second.ok) {
       throw new Error(
@@ -37,6 +43,7 @@ export async function getServerSideProps(context) {
     return { props: { error: error.message || "Unexpected error occurred" } };
   }
 }
+
 
 const Id = ({ data, id, url, name, email, website }) => {
   return (
@@ -70,7 +77,7 @@ const Id = ({ data, id, url, name, email, website }) => {
       <section className="p-4">
         <Card {...data} />
       </section>
-      <img src={url} className="aspect-[1200/630]" alt={name} />
+      <img width={'600'} height={'315'} src={url} className="aspect-[1200/630] mx-auto" alt={name} />
     </>
   );
 };
