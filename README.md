@@ -26,4 +26,4 @@ The Dynamic Meta Tag Image Generator is a custom solution developed to enhance t
 - Vercel: For serverless function deployment.
 
 ## Example
-![Example](image.png)
+![Example](./image.png)
